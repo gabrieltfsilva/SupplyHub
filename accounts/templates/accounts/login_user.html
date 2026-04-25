@@ -1,0 +1,80 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SupplyHub — Login</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/icons/bootstrap-icons.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'css/accounts.css' %}" />
+  </head>
+
+  <body>
+    <div class="card shadow-lg">
+      <div class="text-center">
+        <div class="app-icon">
+          <i class="bi bi-cart3"></i>
+        </div>
+        <h1>SupplyHub</h1>
+        <p class="subtitle">Acesse o catálogo de fornecedores</p>
+      </div>
+
+      <form method="POST">
+        {% csrf_token %} {% if form.errors %}
+        <div class="alert alert-danger py-2" style="font-size: 14px">
+          Usuário ou senha inválidos.
+        </div>
+        {% endif %}
+
+        <div class="mb-3">
+          <label for="username" class="form-label">Usuário</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            class="form-control"
+            placeholder="Digite seu usuário"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label">Senha</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              name="password"
+              id="password"
+              class="form-control"
+              placeholder="••••••••"
+              required
+            />
+            <button
+              type="button"
+              class="toggle-pw"
+              onclick="togglePw('password', 'icon-login')"
+            >
+              <i id="icon-login" class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mb-3">Entrar</button>
+
+        <p class="text-center signup-link mb-0">
+          Não tem conta? <a href="{% url 'register_user' %}">Cadastre-se</a>
+        </p>
+      </form>
+    </div>
+
+    <script src="{% static 'js/accounts.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

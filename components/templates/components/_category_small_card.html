@@ -1,0 +1,14 @@
+{% load icon_tags %}
+{% get_category_config name as cfg %}
+
+<div class="col-6 col-md-4 col-lg-2">
+    <div class="cat-card">
+        <div class="cat-card-icon" style="background-color: {{ cfg.bg }};">
+            <i class="bi {{ cfg.icon }}" style="color: {{ cfg.color }};"></i>
+        </div>
+
+        <span class="cat-card-nome">{{ name }}</span>
+        <span class="cat-card-count">{{ count }}</span>
+        <span class="cat-card-label">Fornecedor{{ count|pluralize:"es" }}</span>
+    </div>
+</div>

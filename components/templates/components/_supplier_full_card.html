@@ -1,0 +1,31 @@
+<div class="col-12 col-md-6 col-lg-4">
+    <div class="supplier-card">
+        <div class="supplier-card-top">
+            {# Aqui chamamos sua lógica Python centralizada #}
+            {% with style=supplier.get_style %}
+                <div class="supplier-icon" style="background-color: {{ style.bg }};">
+                    <i class="bi {{ style.icon }}" style="color: {{ style.color }};"></i>
+                </div>
+                <div>
+                    <h3 class="supplier-name">{{ name }}</h3>
+                    <span class="supplier-badge" style="color: {{ style.color }}; background-color: {{ style.bg }};">
+                        {{ category }}
+                    </span>
+                </div>
+            {% endwith %}
+        </div>
+
+        <ul class="supplier-info">
+            <li><i class="bi bi-geo-alt"></i>{{ city }}, {{ state }}</li>
+            <li><i class="bi bi-telephone"></i>{{ phone }}</li>
+        </ul>
+
+        <div class="supplier-footer">
+            <span class="supplier-subcat">{{ subcat }}</span> 
+            <div class="supplier-rating">
+                <i class="bi bi-star-fill"></i>
+                <span>{{ rating }}</span>
+            </div>
+        </div>
+    </div>
+</div>

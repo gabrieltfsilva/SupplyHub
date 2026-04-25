@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load icon_tags %}
+
+{% block title %}Avaliar Fornecedor - SupplyHub{% endblock %}
+{% block page_title %}Avaliar Fornecedor{% endblock %}
+
+{% block content %}
+{% get_category_config supplier.subcategory.get_category_display as config %}
+
+<div class="form-container mb-4" style="max-width: 100%;">
+  <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
+    <i class="bi bi-star me-1"></i>NOVA AVALIAÇÃO
+  </p>
+  
+  <form method="POST" action="{% url 'rate_supplier' supplier.id %}">
+    {% csrf_token %}
+    <div class="mb-4">
+      <label>Sua Avaliação <span class="required-dot">*</span></label>
+      <div class="star-picker mt-2 mb-1">
+        <i class="bi bi-star star-btn" data-value="1"></i>
+        <i class="bi bi-star star-btn" data-value="2"></i>
+        <i class="bi bi-star star-btn" data-value="3"></i>
+        <i class="bi bi-star star-btn" data-value="4"></i>
+        <i class="bi bi-star star-btn" data-value="5"></i>
+      </div>
+      <input type="hidden" id="nota" name="nota" value="" required>
+      <div class="star-hint-container">
+        <span id="star-text" class="star-hint">Clique nas estrelas para avaliar de 1 a 5</span>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label for="comentario">Comentário (opcional)</label>
+      <textarea id="comentario" name="comentario" class="form-control" rows="6" placeholder="Compartilhe sua experiência com este fornecedor..."></textarea>
+    </div>
+
+    <div class="d-flex gap-3">
+      <button type="submit" class="btn btn-primary" style="flex: 1;">
+        Salvar Avaliação
+      </button>
+      <a href="{% url 'supplier' supplier.id %}" class="btn-cancelar">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<div class="form-container" style="max-width: 100%;">
+  <div class="d-flex align-items-center gap-3">
+    <div class="supplier-icon-sm" style="background-color: {{ config.bg }};">
+      <i class="bi {{ config.icon }}" style="color: {{ config.color }};"></i>
+    </div>
+    <div>
+      <p class="supplier-name-sm">{{ supplier.name }}</p>
+      <p class="supplier-meta">{{ supplier.location }}</p>
+      <p class="supplier-meta">{{ supplier.phone }}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .star-picker {
+    display: flex;
+    gap: 8px;
+    font-size: 32px;
+    color: #444;
+  }
+
+  .star-btn {
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  .star-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .star-btn.active,
+  .star-btn.hovered {
+    color: #f59e0b;
+  }
+
+  .star-hint-container {
+    height: 20px;
+  }
+
+  .star-hint {
+    color: #4d9fff;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .star-hint.selected {
+    color: #f59e0b;
+  }
+
+  .btn-cancelar {
+    display: flex;
+    align-items: center;
+    color: #888;
+    font-size: 15px;
+    text-decoration: none;
+    padding: 0 8px;
+    transition: color 0.15s;
+  }
+
+  .btn-cancelar:hover {
+    color: #ccc;
+  }
+
+  .supplier-icon-sm {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .supplier-name-sm {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f0f0f0;
+    margin: 0 0 2px;
+  }
+
+  .supplier-meta {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+  }
+</style>
+
+<script>
+  const stars = document.querySelectorAll('.star-btn');
+  const input = document.getElementById('nota');
+  const label = document.getElementById('star-text');
+  
+  const meanings = {
+    0: "Clique nas estrelas para avaliar de 1 a 5",
+    1: "Péssimo",
+    2: "Ruim",
+    3: "Regular",
+    4: "Muito Bom",
+    5: "Excelente"
+  };
+
+  stars.forEach(star => {
+    star.addEventListener('mouseenter', () => {
+      const val = parseInt(star.dataset.value);
+      label.textContent = meanings[val];
+      stars.forEach(s => s.classList.toggle('hovered', parseInt(s.dataset.value) <= val));
+    });
+
+    star.addEventListener('mouseleave', () => {
+      stars.forEach(s => s.classList.remove('hovered'));
+      label.textContent = meanings[input.value || 0];
+    });
+
+    star.addEventListener('click', () => {
+      const val = parseInt(star.dataset.value);
+      input.value = val;
+      label.classList.add('selected');
+      stars.forEach(s => {
+        const active = parseInt(s.dataset.value) <= val;
+        s.classList.toggle('active', active);
+        s.className = active ? 'bi bi-star-fill star-btn active' : 'bi bi-star star-btn';
+      });
+    });
+  });
+</script>
+{% endblock %}

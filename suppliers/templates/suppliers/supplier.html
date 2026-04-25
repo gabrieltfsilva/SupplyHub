@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% load icon_tags %}
+
+{% block title %}{{ supplier.name }} - SupplyHub{% endblock %}
+
+{% block page_title %}{{ supplier.name }}{% endblock %}
+
+{% block content %}
+{% get_category_config supplier.subcategory.get_category_display as config %}
+
+<div class="form-container mb-4" style="max-width: 100%;">
+  <div class="d-flex align-items-center gap-4">
+    <div class="supplier-icon" style="background-color: {{ config.bg }};">
+      <i class="bi {{ config.icon }}" style="color: {{ config.color }};"></i>
+    </div>
+    <div>
+      <h2 class="supplier-name">{{ supplier.name }}</h2>
+      <div class="d-flex gap-2 mb-2">
+        <span class="badge-categoria" style="background-color: {{ config.color }};">
+          {{ supplier.subcategory.get_category_display }}
+        </span>
+        <span class="badge-subcategoria">{{ supplier.subcategory.name }}</span>
+      </div>
+      <p class="supplier-desc">{{ supplier.description|default:"Fornecedor cadastrado no sistema SupplyHub." }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-12 col-md-6">
+    <div class="form-container h-100" style="max-width: 100%;">
+      <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
+        <i class="bi bi-building me-1"></i>INFORMAÇÕES DE CONTATO
+      </p>
+      <div class="contact-row">
+        <div class="contact-item">
+          <span class="contact-label">Localização</span>
+          <span class="contact-value">
+            <i class="bi bi-geo-alt" style="color: #555;"></i>
+            {{ supplier.location }}
+          </span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Telefone</span>
+          <span class="contact-value">
+            <i class="bi bi-telephone" style="color: #555;"></i>
+            {{ supplier.phone }}
+          </span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <span class="contact-value">
+            <i class="bi bi-envelope" style="color: #555;"></i>
+            {{ supplier.email }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6">
+    <div class="form-container h-100" style="max-width: 100%;">
+      <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
+        <i class="bi bi-star me-1"></i>AVALIAÇÃO
+      </p>
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <p class="contact-label mb-2">Média Geral</p>
+          <div class="d-flex align-items-center gap-2">
+            <div class="stars">
+              <i class="bi {% if average > 0 %}bi-star-fill{% else %}bi-star{% endif %}" style="color: #f59e0b;"></i>
+            </div>
+            <span class="rating-value">{{ average|default:"0.0" }}</span>
+          </div>
+          <p class="contact-label mt-2">{{ count }} avaliação{{ count|pluralize }}</p>
+        </div>
+        <div class="d-flex flex-column gap-2" style="min-width: 220px;">
+          <a href="{% url 'rate_supplier' supplier.id %}" class="btn btn-primary w-100">
+            <i class="bi bi-star me-2"></i>Avaliar Fornecedor
+          </a>
+          <form action="{% url 'delete_review' supplier.id %}" method="POST" style="width: 100%;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Deseja realmente remover sua avaliação?')">
+              <i class="bi bi-trash me-2"></i>Remover Avaliação
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<h5 class="section-heading mb-3">Avaliações dos Clientes</h5>
+
+{% for review in reviews %}
+  {% include "components/_review_card.html" with rating=review.rating date=review.created_at|date:"d/m/Y H:i" comment=review.comment %}
+{% empty %}
+  <div class="form-container" style="max-width: 100%;">
+    <p class="text-muted m-0" style="font-size: 14px;">Este fornecedor ainda não possui avaliações.</p>
+  </div>
+{% endfor %}
+
+<style>
+  .supplier-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    flex-shrink: 0;
+  }
+
+  .supplier-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #f0f0f0;
+    margin-bottom: 8px;
+  }
+
+  .supplier-desc {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .badge-categoria {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: #fff;
+  }
+
+  .badge-subcategoria {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background-color: #2a2a2a;
+    border: 1px solid #333;
+    color: #ccc;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .contact-label {
+    font-size: 12px;
+    color: #555;
+    margin: 0;
+  }
+
+  .contact-value {
+    font-size: 15px;
+    color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stars {
+    display: flex;
+    gap: 3px;
+    font-size: 18px;
+  }
+
+  .rating-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f0f0f0;
+  }
+
+  .section-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f0f0f0;
+  }
+
+  .btn-primary, .btn-danger {
+    height: 42px;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-danger {
+    background-color: #ef4444;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background-color: #dc2626;
+    color: white;
+  }
+</style>
+
+{% endblock %}

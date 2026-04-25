@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SupplyHub - {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/icons/bootstrap-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+
+  <body>
+    {% include "components/_navbar.html" %}
+
+    <main class="container py-4">
+        <header class="mb-4">
+            <h1 style="font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px;">
+                {% block page_title %}{% endblock %}
+            </h1>
+            <p style="color: #a0a0a0; font-size: 14px; margin: 0;">
+                {% block page_subtitle %}{% endblock %}
+            </p>
+        </header>
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

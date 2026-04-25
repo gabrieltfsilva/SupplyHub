@@ -1,0 +1,32 @@
+<div class="col-12 col-md-4">
+    {% if label == 'Total de Fornecedores' %}
+        {% with bg="#1e293b" icon="bi-rocket-takeoff" %}
+            <div class="metric-card" style="background-color: {{ bg }}; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="metric-label">
+                    <i class="bi {{ icon }} me-2"></i>{{ label }}
+                </div>
+                <div class="metric-value">{{ value }}</div>
+            </div>
+        {% endwith %}
+
+    {% elif label == 'Média Geral' %}
+        {% with bg="#0f4224" icon="bi-star" %}
+            <div class="metric-card" style="background-color: {{ bg }}; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="metric-label">
+                    <i class="bi {{ icon }} me-2"></i>{{ label }}
+                </div>
+                <div class="metric-value">{{ value }}</div>
+            </div>
+        {% endwith %}
+
+    {% elif label == 'Total de Avaliações' %}
+        {% with bg="#542a05" icon="bi-chat-left-text" %}
+            <div class="metric-card" style="background-color: {{ bg }}; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="metric-label">
+                    <i class="bi {{ icon }} me-2"></i>{{ label }}
+                </div>
+                <div class="metric-value">{{ value }}</div>
+            </div>
+        {% endwith %}
+    {% endif %}
+</div>

@@ -1,0 +1,131 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SupplyHub — Cadastro</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/icons/bootstrap-icons.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'css/accounts.css' %}" />
+  </head>
+
+  <body>
+    <div class="card shadow-lg">
+      <div class="text-center">
+        <div class="app-icon">
+          <i class="bi bi-cart3"></i>
+        </div>
+        <h1>SupplyHub</h1>
+        <p class="subtitle">Crie sua conta</p>
+      </div>
+
+      {% if messages %} {% for message in messages %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} py-2 small"
+      >
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %}
+
+      <form method="POST" action="{% url 'register_user' %}">
+        {% csrf_token %}
+
+        <p class="section-label">Dados de Acesso</p>
+
+        <div class="mb-3">
+          <label for="username">Nome de usuário</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            class="form-control"
+            placeholder="Ex: gabriel_silva"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="email">E-mail</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="form-control"
+            placeholder="usuario@empresa.com"
+            required
+          />
+        </div>
+
+        <hr class="divider" />
+
+        <p class="section-label">Segurança</p>
+
+        <div class="mb-3">
+          <label for="password1">Senha</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              name="password1"
+              id="password1"
+              class="form-control"
+              placeholder="Mínimo 8 caracteres"
+              required
+            />
+            <button
+              type="button"
+              class="toggle-pw"
+              onclick="togglePw('password1', 'icon-s1')"
+            >
+              <i id="icon-s1" class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="password2">Confirmar senha</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              name="password2"
+              id="password2"
+              class="form-control"
+              placeholder="Repita a senha"
+              oninput="checkMatch()"
+              required
+            />
+            <button
+              type="button"
+              class="toggle-pw"
+              onclick="togglePw('password2', 'icon-s2')"
+            >
+              <i id="icon-s2" class="bi bi-eye"></i>
+            </button>
+          </div>
+          <div
+            id="match-msg"
+            class="form-text mt-1"
+            style="display: none"
+          ></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mb-3">
+          Criar conta
+        </button>
+
+        <p class="text-center login-link mb-0">
+          Já tem conta? <a href="{% url 'login_user' %}">Entrar</a>
+        </p>
+      </form>
+    </div>
+
+    <script src="{% static 'js/accounts.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

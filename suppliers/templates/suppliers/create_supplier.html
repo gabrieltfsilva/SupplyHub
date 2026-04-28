@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Cadastrar Fornecedores - SupplyHub{% endblock %}
+{% block title %}
+  {% if supplier %}Editar {{ supplier.name }}{% else %}Cadastrar Fornecedor{% endif %} - SupplyHub
+{% endblock %}
 
-{% block page_title %}Cadastrar Fornecedor{% endblock %}
-{% block page_subtitle %}Preencha os dados abaixo para adicionar um novo fornecedor.{% endblock %}
+{% block page_title %}
+  {% if supplier %}Editar Fornecedor{% else %}Cadastrar Fornecedor{% endif %}
+{% endblock %}
+
+{% block page_subtitle %}
+  {% if supplier %}Atualize os dados do fornecedor selecionado.{% else %}Preencha os dados abaixo para adicionar um novo fornecedor.{% endif %}
+{% endblock %}
 
 {% block content %}
 
@@ -18,44 +25,80 @@
     <div class="row g-3">
       <div class="col-12 col-md-6">
         <label for="name">Nome da Empresa <span class="required-dot">*</span></label>
-        <input type="text" id="name" name="name" placeholder="Ex: TechSupply Industrial" required>
+        <input type="text" id="name" name="name" 
+               value="{{ supplier.name|default:'' }}" 
+               placeholder="Ex: TechSupply Industrial" 
+               {% if supplier %}readonly style="background-color: #1a1a1a; cursor: not-allowed;"{% endif %} required>
       </div>
+
       <div class="col-12 col-md-6">
         <label for="location">Localização <span class="required-dot">*</span></label>
-        <input type="text" id="location" name="location" placeholder="Cidade, UF" required>
+        <input type="text" id="location" name="location" 
+               value="{{ supplier.location|default:'' }}" 
+               placeholder="Cidade, UF" required>
       </div>
+
       <div class="col-12 col-md-6">
         <label for="category">Categoria <span class="required-dot">*</span></label>
         <select id="category" name="category" required onchange="filterSubcategories()">
-          <option value="" disabled selected>Selecione...</option>
+          <option value="" disabled {% if not supplier %}selected{% endif %}>Selecione...</option>
           {% for value, label in categories_list %}
-            <option value="{{ value }}">{{ label }}</option>
+            <option value="{{ value }}" {% if supplier.category == value %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
       </div>
+
       <div class="col-12 col-md-6">
         <label for="subcategory">Subcategoria <span class="required-dot">*</span></label>
-        <select id="subcategory" name="subcategory" required disabled>
-          <option value="">Aguardando categoria...</option>
+        <select id="subcategory" name="subcategory" required {% if not supplier %}disabled{% endif %}>
+          {% if supplier %}
+            {% for sub in subcategories %}
+              {% if sub.category == supplier.category %}
+                <option value="{{ sub.id }}" {% if supplier.subcategory_id == sub.id %}selected{% endif %}>{{ sub.name }}</option>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <option value="">Aguardando categoria...</option>
+          {% endif %}
         </select>
       </div>
+
       <div class="col-12 col-md-6">
         <label for="phone">Telefone de Contato <span class="required-dot">*</span></label>
-        <input type="tel" id="phone" name="phone" placeholder="(00) 0000-0000" required>
+        <input type="tel" id="phone" name="phone" 
+               value="{{ supplier.phone|default:'' }}" 
+               placeholder="(00) 0000-0000" required>
       </div>
+
       <div class="col-12 col-md-6">
         <label for="email">E-mail Corporativo <span class="required-dot">*</span></label>
-        <input type="email" id="email" name="email" placeholder="contato@empresa.com" required>
+        <input type="email" id="email" name="email" 
+               value="{{ supplier.email|default:'' }}" 
+               placeholder="contato@empresa.com" required>
       </div>
+
       <div class="col-12">
         <label for="description">Descrição do Serviço</label>
-        <textarea id="description" name="description" placeholder="Descreva brevemente as atividades do fornecedor..."></textarea>
+        <textarea id="description" name="description" 
+                  placeholder="Descreva brevemente as atividades do fornecedor...">{{ supplier.description|default:'' }}</textarea>
       </div>
     </div>
 
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button type="button" class="btn btn-secondary" onclick="history.back()" style="width: 160px;">Cancelar</button>
-      <button type="submit" class="btn btn-primary" style="width: 160px;">Salvar</button>
+    <div class="d-flex justify-content-between mt-4">
+      <div>
+        {% if supplier %}
+          <button type="button" class="btn btn-outline-danger" onclick="confirmDelete()" style="width: 180px;">
+            <i class="bi bi-trash me-2"></i>Remover Fornecedor
+          </button>
+        {% endif %}
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-secondary" onclick="history.back()" style="width: 160px;">Cancelar</button>
+        <button type="submit" class="btn btn-primary" style="width: 160px;">
+          {% if supplier %}Atualizar Dados{% else %}Salvar Fornecedor{% endif %}
+        </button>
+      </div>
     </div>
   </form>
 </div>
@@ -91,6 +134,12 @@
     } else {
       subcategorySelect.innerHTML = '<option value="">Nenhuma subcategoria encontrada</option>';
       subcategorySelect.disabled = true;
+    }
+  }
+
+  function confirmDelete() {
+    if (confirm("Deseja realmente excluir este fornecedor? Esta ação não pode ser desfeita.")) {
+      window.location.href = "{% if supplier %}{% url 'delete_supplier' supplier.id %}{% endif %}";
     }
   }
 </script>

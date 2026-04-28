@@ -61,7 +61,7 @@
   <div class="col-12 col-md-6">
     <div class="form-container h-100" style="max-width: 100%;">
       <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
-        <i class="bi bi-star me-1"></i>AVALIAÇÃO
+        <i class="bi bi-star me-1"></i>AÇÕES E AVALIAÇÃO
       </p>
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
         <div>
@@ -74,16 +74,22 @@
           </div>
           <p class="contact-label mt-2">{{ count }} avaliação{{ count|pluralize }}</p>
         </div>
+        
         <div class="d-flex flex-column gap-2" style="min-width: 220px;">
           <a href="{% url 'rate_supplier' supplier.id %}" class="btn btn-primary w-100">
             <i class="bi bi-star me-2"></i>Avaliar Fornecedor
           </a>
+
           <form action="{% url 'delete_review' supplier.id %}" method="POST" style="width: 100%;">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Deseja realmente remover sua avaliação?')">
               <i class="bi bi-trash me-2"></i>Remover Avaliação
             </button>
           </form>
+
+          <a href="{% url 'edit_supplier' supplier.id %}" class="btn btn-success w-100">
+            <i class="bi bi-pencil-square me-2"></i>Editar Fornecedor
+          </a>
         </div>
       </div>
     </div>
@@ -188,7 +194,7 @@
     color: #f0f0f0;
   }
 
-  .btn-primary, .btn-danger {
+  .btn-primary, .btn-danger, .btn-success {
     height: 42px;
     padding: 0 16px;
     border-radius: 8px;
@@ -209,6 +215,16 @@
 
   .btn-danger:hover {
     background-color: #dc2626;
+    color: white;
+  }
+
+  .btn-success {
+    background-color: #22c55e;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background-color: #16a34a;
     color: white;
   }
 </style>

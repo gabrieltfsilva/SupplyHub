@@ -133,3 +133,46 @@ def create_supplier(request):
         'subcategories': subcategories,
         'categories_list': categories_list
     })
+
+@login_required
+def edit_supplier(request, pk):
+    # Busca o fornecedor pelo ID ou retorna 404
+    supplier = get_object_or_404(Supplier, pk=pk)
+
+    if request.method == "POST":
+        location = request.POST.get('location')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        description = request.POST.get('description')
+        subcategory_id = request.POST.get('subcategory')
+
+        if email and subcategory_id:
+            try:
+                sub = get_object_or_404(Subcategory, id=subcategory_id)
+                
+                # Atualiza os campos do objeto existente
+                supplier.location = location
+                supplier.phone = phone
+                supplier.email = email
+                supplier.description = description
+                supplier.subcategory = sub
+                
+                supplier.save()
+                return redirect('suppliers')
+            except:
+                pass
+
+    subcategories = Subcategory.objects.all()
+    categories_list = Subcategory.CATEGORY_CHOICES
+    
+    return render(request, "suppliers/create_supplier.html", {
+        'supplier': supplier, # Aqui passamos o objeto para o template saber que é EDIÇÃO
+        'subcategories': subcategories,
+        'categories_list': categories_list
+    })
+
+@login_required
+def delete_supplier(request, pk):
+    supplier = get_object_or_404(Supplier, pk=pk)
+    supplier.delete()
+    return redirect('suppliers')

@@ -1,6 +1,10 @@
 import os
+import mimetypes
 from pathlib import Path
 from dotenv import load_dotenv
+
+mimetypes.add_type("text/css", ".css", True)
+mimetypes.add_type("application/javascript", ".js", True)
 
 load_dotenv()
 
@@ -157,9 +161,11 @@ RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_REQUIRED_SCORE = float(os.getenv('RECAPTCHA_REQUIRED_SCORE', 0.5))
 
+# "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
 STORAGES = {
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
+
 WHITENOISE_MANIFEST_STRICT = False

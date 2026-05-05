@@ -22,10 +22,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    'supplyhub-hbd3czduh7cvbyek.eastus2-01.azurewebsites.net',
-    '.azurewebsites.net',
-    'localhost',
-    '127.0.0.1',
+    host.strip() 
+    for host in os.getenv('ALLOWED_HOSTS', 'localhost, 127.0.0.1').split(',') 
+    if host
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://supplyhub-hbd3czduh7cvbyek.eastus2-01.azurewebsites.net']

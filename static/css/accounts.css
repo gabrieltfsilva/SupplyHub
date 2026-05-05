@@ -42,6 +42,37 @@ h1 {
   margin-bottom: 32px;
 }
 
+.divider {
+  border-color: #2a2a2a;
+  margin: 24px 0;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.signup-link,
+.login-link {
+  font-size: 14px;
+  color: #666;
+}
+
+.signup-link a,
+.login-link a {
+  color: #4d9fff;
+  text-decoration: none;
+}
+
+.signup-link a:hover,
+.login-link a:hover {
+  text-decoration: underline;
+}
+
 label {
   color: #ccc;
   font-size: 14px;
@@ -85,49 +116,12 @@ label {
   font-size: 13px;
 }
 
-.btn-primary {
-  background-color: #1d6fe5;
-  border: none;
-  border-radius: 8px;
-  padding: 11px;
-  font-weight: 600;
-  font-size: 15px;
-  transition: background-color 0.2s;
+.match-ok {
+  border-color: #1db954 !important;
 }
 
-.btn-primary:hover {
-  background-color: #1660cc;
-}
-
-.signup-link,
-.login-link {
-  font-size: 14px;
-  color: #666;
-}
-
-.signup-link a,
-.login-link a {
-  color: #4d9fff;
-  text-decoration: none;
-}
-
-.signup-link a:hover,
-.login-link a:hover {
-  text-decoration: underline;
-}
-
-.divider {
-  border-color: #2a2a2a;
-  margin: 24px 0;
-}
-
-.section-label {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #555;
-  margin-bottom: 16px;
+.match-err {
+  border-color: #e5341d !important;
 }
 
 .password-wrapper {
@@ -163,14 +157,6 @@ label {
   color: #aaa;
 }
 
-.match-ok {
-  border-color: #1db954 !important;
-}
-
-.match-err {
-  border-color: #e5341d !important;
-}
-
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none !important;
@@ -183,4 +169,41 @@ input::-webkit-credentials-auto-fill-button,
 input::-webkit-password-toggle-button {
   display: none !important;
   -webkit-appearance: none !important;
+}
+
+.btn-primary {
+  background-color: #1d6fe5;
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #1660cc;
+}
+
+div.alert {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  border-radius: 8px !important;
+  margin-bottom: 20px;
+  padding: 10px !important;
+  border: 1px solid transparent;
+}
+
+div.alert.alert-danger,
+div.alert.alert-error {
+  background-color: #fccbcf !important;
+  border-color: #cb1815 !important;
+  color: #cb1815 !important;
+}
+
+div.alert.alert-success {
+  background-color: rgba(29, 185, 84, 0.1) !important;
+  border-color: #1db954 !important;
+  color: #1db954 !important;
 }

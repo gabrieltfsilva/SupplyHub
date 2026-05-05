@@ -169,3 +169,23 @@ STORAGES = {
 }
 
 WHITENOISE_MANIFEST_STRICT = False
+
+{
+  "files.associations": {
+    "**/templates/**/*.html": "django-html",
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+  },
+  "emmet.includeLanguages": {
+    "django-html": "html"
+  },
+  "[django-html]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": True,
+    "editor.defaultFormatter": "batisteo.vscode-django"
+  },
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.formatOnSave": True
+  }
+}
+

@@ -32,8 +32,12 @@ def home(request):
 
 @login_required
 def users(request):
-    usuarios = User.objects.all()
-    return render(request, "accounts/users.html", {
+    if request.user.is_superuser:
+        usuarios = User.objects.all().order_by('username')
+    else:
+        usuarios = User.objects.filter(id=request.user.id)
+        
+    return render(request, "core/users.html", {
         "usuarios": usuarios
     })
 

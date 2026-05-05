@@ -13,12 +13,17 @@
       rel="stylesheet"
       href="{% static 'bootstrap/icons/bootstrap-icons.min.css' %}"
     />
-    <link rel="stylesheet" href="{% static 'css/accounts.css' %}" />
-    
+    <link
+      rel="stylesheet"
+      href="{% static 'css/accounts.css' %}?v={% now 'U' %}"
+    />
+
     <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_PUBLIC_KEY }}"></script>
     <script>
-      grecaptcha.ready(function() {
-          grecaptcha.execute('{{ RECAPTCHA_PUBLIC_KEY }}', {action: 'register'});
+      grecaptcha.ready(function () {
+        grecaptcha.execute("{{ RECAPTCHA_PUBLIC_KEY }}", {
+          action: "register",
+        });
       });
     </script>
   </head>
@@ -33,20 +38,18 @@
         <p class="subtitle">Crie sua conta</p>
       </div>
 
-      {% if messages %} 
-        {% for message in messages %}
-          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} py-2 small">
-            {{ message }}
-          </div>
-        {% endfor %} 
-      {% endif %}
+      {% if messages %} {% for message in messages %}
+      <div
+        class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} py-2"
+      >
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %}
 
       <form method="POST" action="{% url 'register_user' %}">
         {% csrf_token %}
 
-        <div style="display: none;">
-          {{ form.captcha }}
-        </div>
+        <div style="display: none">{{ form.captcha }}</div>
 
         <p class="section-label">Dados de Acesso</p>
 
@@ -57,7 +60,7 @@
             name="username"
             id="username"
             class="form-control"
-            placeholder="Ex: gabriel_silva"
+            placeholder="Ex: maria"
             required
           />
         </div>

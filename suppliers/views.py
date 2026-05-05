@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from .models import Subcategory, Supplier, Review
 from django.db.models import Avg
 from .forms import ReviewForm
@@ -77,6 +78,9 @@ def delete_review(request, supplier_id):
 @login_required
 def categories(request):
     if request.method == "POST":
+        if not request.user.is_superuser:
+            raise PermissionDenied
+
         subcategory_name = request.POST.get('nome')
         category_value = request.POST.get('categoria')
         
@@ -97,6 +101,9 @@ def categories(request):
 
 @login_required
 def delete_subcategory(request, sub_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     subcategory = get_object_or_404(Subcategory, id=sub_id)
     subcategory.delete()
     return redirect('categories')
@@ -104,6 +111,9 @@ def delete_subcategory(request, sub_id):
 @login_required
 def create_supplier(request):
     if request.method == "POST":
+        if not request.user.is_superuser:
+            raise PermissionDenied
+
         name = request.POST.get('name')
         location = request.POST.get('location')
         phone = request.POST.get('phone')
@@ -122,7 +132,7 @@ def create_supplier(request):
                     description=description,
                     subcategory=sub
                 )
-                return redirect('suppliers')
+                return redirect('create_supplier')
             except:
                 pass
 
@@ -136,7 +146,9 @@ def create_supplier(request):
 
 @login_required
 def edit_supplier(request, pk):
-    # Busca o fornecedor pelo ID ou retorna 404
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     supplier = get_object_or_404(Supplier, pk=pk)
 
     if request.method == "POST":
@@ -150,7 +162,6 @@ def edit_supplier(request, pk):
             try:
                 sub = get_object_or_404(Subcategory, id=subcategory_id)
                 
-                # Atualiza os campos do objeto existente
                 supplier.location = location
                 supplier.phone = phone
                 supplier.email = email
@@ -158,7 +169,7 @@ def edit_supplier(request, pk):
                 supplier.subcategory = sub
                 
                 supplier.save()
-                return redirect('suppliers')
+                return redirect('create_supplier')
             except:
                 pass
 
@@ -166,13 +177,16 @@ def edit_supplier(request, pk):
     categories_list = Subcategory.CATEGORY_CHOICES
     
     return render(request, "suppliers/create_supplier.html", {
-        'supplier': supplier, # Aqui passamos o objeto para o template saber que é EDIÇÃO
+        'supplier': supplier,
         'subcategories': subcategories,
         'categories_list': categories_list
     })
 
 @login_required
 def delete_supplier(request, pk):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     supplier = get_object_or_404(Supplier, pk=pk)
     supplier.delete()
-    return redirect('suppliers')
+    return redirect('create_supplier')

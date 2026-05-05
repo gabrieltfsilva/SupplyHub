@@ -61,7 +61,7 @@ def register_user(request):
             except Exception:
                 messages.error(request, "Erro ao criar conta. Tente novamente.")
         else:
-            messages.error(request, "Por favor, corrija os erros abaixo.")
+            messages.error(request, "Não foi possível cadastrar o usuário.")
     else:
         form = SignUpForm()
     

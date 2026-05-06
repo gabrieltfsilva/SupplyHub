@@ -7,6 +7,20 @@
 {% block page_subtitle %}Explore o catálogo completo de fornecedores.{% endblock %}
 
 {% block content %}
+{% if messages %}
+  <div class="messages mb-4">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="font-size: 14px; border-radius: 8px;">
+        {% if message.tags == 'success' %}<i class="bi bi-check-circle me-2"></i>{% endif %}
+        {% if message.tags == 'error' %}<i class="bi bi-exclamation-octagon me-2"></i>{% endif %}
+        {% if message.tags == 'warning' %}<i class="bi bi-exclamation-triangle me-2"></i>{% endif %}
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
 <div class="form-container mb-4" style="max-width: 100%;">
   <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
     <i class="bi bi-funnel me-1"></i>FILTROS DE BUSCA
@@ -72,7 +86,7 @@
             <span class="supplier-subcat">{{ supplier.subcategory.name }}</span>
             <div class="supplier-rating">
               <i class="bi bi-star-fill"></i>
-              <span>{{ supplier.average_rating|default:"0.0" }}</span>
+              <span>{{ supplier.average_rating|default:"0.0"|floatformat:1 }}</span>
             </div>
           </div>
         </div>
@@ -118,5 +132,4 @@
   }
   window.onload = filterSubcategories;
 </script>
-
 {% endblock %}

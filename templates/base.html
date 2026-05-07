@@ -15,16 +15,31 @@
     {% include "components/_navbar.html" %}
 
     <main class="container py-4">
-        <header class="mb-4">
-            <h1 style="font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px;">
-                {% block page_title %}{% endblock %}
-            </h1>
-            <p style="color: #a0a0a0; font-size: 14px; margin: 0;">
-                {% block page_subtitle %}{% endblock %}
-            </p>
-        </header>
-        
-        {% block content %}{% endblock %}
+      <header class="mb-4">
+        <h1 style="font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px;">
+          {% block page_title %}{% endblock %}
+        </h1>
+        <p style="color: #a0a0a0; font-size: 14px; margin: 0;">
+          {% block page_subtitle %}{% endblock %}
+        </p>
+      </header>
+
+      {% if messages %}
+        <div class="messages mb-4">
+          {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert" style="font-size: 14px; border-radius: 8px;">
+              {% if message.tags == 'success' %}<i class="bi bi-check-circle me-2"></i>{% endif %}
+              {% if message.tags == 'error' %}<i class="bi bi-exclamation-octagon me-2"></i>{% endif %}
+              {% if message.tags == 'warning' %}<i class="bi bi-exclamation-triangle me-2"></i>{% endif %}
+              {% if message.tags == 'info' %}<i class="bi bi-info-circle me-2"></i>{% endif %}
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
     </main>
 
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>

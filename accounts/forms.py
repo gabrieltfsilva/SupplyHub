@@ -2,11 +2,13 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django_recaptcha.fields import ReCaptchaV3
 
+
 class SignUpForm(UserCreationForm):
     captcha = ReCaptchaV3()
 
     class Meta(UserCreationForm.Meta):
         fields = UserCreationForm.Meta.fields + ('email',)
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(

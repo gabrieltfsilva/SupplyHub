@@ -8,115 +8,121 @@
 
 {% block content %}
 
-<div class="form-container mb-4" style="max-width: 100%;">
-  <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
-    <i class="bi bi-funnel me-1"></i>FILTROS DE BUSCA
-  </p>
-  <form method="GET" action="">
-    <div class="row g-3">
-      <div class="col-12 col-md-4">
-        <label for="search">Buscar</label>
-        <div style="position: relative;">
-          <i class="bi bi-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666; font-size: 13px; pointer-events: none;"></i>
-          <input type="text" id="search" name="search" placeholder="Nome ou localização..." value="{{ request.GET.search }}" style="padding-left: 34px;">
-        </div>
-      </div>
-      <div class="col-12 col-md-3">
-        <label for="categoria">Categoria</label>
-        <select id="categoria" name="categoria" onchange="filterSubcategories()">
-          <option value="">Todas</option>
-          {% for value, label in categories_list %}
-            <option value="{{ value }}" {% if request.GET.categoria == value %}selected{% endif %}>{{ label }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-12 col-md-3">
-        <label for="subcategoria">Subcategoria</label>
-        <select id="subcategoria" name="subcategoria">
-          <option value="">Todas</option>
-        </select>
-      </div>
-      <div class="col-12 col-md-2 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
-      </div>
-    </div>
-  </form>
-</div>
-
-<p style="color: #666; font-size: 13px; margin-bottom: 16px;">
-  {{ suppliers.count }} fornecedor{{ suppliers.count|pluralize:"es" }} encontrado{{ suppliers.count|pluralize:"s" }}
-</p>
-
-<div class="row g-3">
-  {% for supplier in suppliers %}
-    {% get_category_config supplier.subcategory.get_category_display as config %}
-    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-      <a href="{% url 'supplier' supplier.id %}" style="text-decoration: none; color: inherit; display: block; height: 100%;">
-        <div class="supplier-card">
-          <div class="supplier-card-top">
-            <div class="supplier-icon" style="background-color: {{ config.bg }};">
-              <i class="bi {{ config.icon }}" style="color: {{ config.color }};"></i>
+    <div class="form-container mb-4" style="max-width: 100%;">
+        <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
+            <i class="bi bi-funnel me-1"></i>FILTROS DE BUSCA
+        </p>
+        <form method="GET" action="">
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label for="search">Buscar</label>
+                    <div style="position: relative;">
+                        <i class="bi bi-search"
+                           style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666; font-size: 13px; pointer-events: none;"></i>
+                        <input type="text" id="search" name="search" placeholder="Nome ou localização..."
+                               value="{{ request.GET.search }}" style="padding-left: 34px;">
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="categoria">Categoria</label>
+                    <select id="categoria" name="categoria" onchange="filterSubcategories()">
+                        <option value="">Todas</option>
+                        {% for value, label in categories_list %}
+                            <option value="{{ value }}"
+                                    {% if request.GET.categoria == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="subcategoria">Subcategoria</label>
+                    <select id="subcategoria" name="subcategoria">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                </div>
             </div>
-            <div>
-              <p class="supplier-name">{{ supplier.name }}</p>
-              <span class="supplier-badge" style="background-color: {{ config.color }}; color: #fff;">
+        </form>
+    </div>
+
+    <p style="color: #666; font-size: 13px; margin-bottom: 16px;">
+        {{ suppliers.count }} fornecedor{{ suppliers.count|pluralize:"es" }}
+        encontrado{{ suppliers.count|pluralize:"s" }}
+    </p>
+
+    <div class="row g-3">
+        {% for supplier in suppliers %}
+            {% get_category_config supplier.subcategory.get_category_display as config %}
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <a href="{% url 'supplier' supplier.id %}"
+                   style="text-decoration: none; color: inherit; display: block; height: 100%;">
+                    <div class="supplier-card">
+                        <div class="supplier-card-top">
+                            <div class="supplier-icon" style="background-color: {{ config.bg }};">
+                                <i class="bi {{ config.icon }}" style="color: {{ config.color }};"></i>
+                            </div>
+                            <div>
+                                <p class="supplier-name">{{ supplier.name }}</p>
+                                <span class="supplier-badge" style="background-color: {{ config.color }}; color: #fff;">
                 {{ supplier.subcategory.get_category_display }}
               </span>
+                            </div>
+                        </div>
+                        <ul class="supplier-info">
+                            <li><i class="bi bi-geo-alt"></i> {{ supplier.location }}</li>
+                            <li><i class="bi bi-telephone"></i> {{ supplier.phone }}</li>
+                            <li><i class="bi bi-envelope"></i> {{ supplier.email }}</li>
+                        </ul>
+                        <div class="supplier-footer">
+                            <span class="supplier-subcat">{{ supplier.subcategory.name }}</span>
+                            <div class="supplier-rating">
+                                <i class="bi bi-star-fill"></i>
+                                <span>{{ supplier.average_rating|default:"0.0"|floatformat:1 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
-          </div>
-          <ul class="supplier-info">
-            <li><i class="bi bi-geo-alt"></i> {{ supplier.location }}</li>
-            <li><i class="bi bi-telephone"></i> {{ supplier.phone }}</li>
-            <li><i class="bi bi-envelope"></i> {{ supplier.email }}</li>
-          </ul>
-          <div class="supplier-footer">
-            <span class="supplier-subcat">{{ supplier.subcategory.name }}</span>
-            <div class="supplier-rating">
-              <i class="bi bi-star-fill"></i>
-              <span>{{ supplier.average_rating|default:"0.0"|floatformat:1 }}</span>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-muted">Nenhum fornecedor encontrado.</p>
             </div>
-          </div>
-        </div>
-      </a>
-    </div>
-  {% empty %}
-    <div class="col-12">
-      <p class="text-muted">Nenhum fornecedor encontrado.</p>
-    </div>
-  {% endfor %}
-</div>
-
-<script>
-  const subcategoriesData = {
-    {% for cat_val, cat_label in categories_list %}
-      "{{ cat_val }}": [
-        {% for sub in all_subcategories %}
-          {% if sub.category == cat_val %}
-            { id: "{{ sub.id }}", name: "{{ sub.name }}" },
-          {% endif %}
         {% endfor %}
-      ],
-    {% endfor %}
-  };
+    </div>
 
-  function filterSubcategories() {
-    const categorySelect = document.getElementById('categoria');
-    const subcategorySelect = document.getElementById('subcategoria');
-    const selectedCategory = categorySelect.value;
-    const currentSub = "{{ request.GET.subcategoria }}";
+    <script>
+        const subcategoriesData = {
+            {% for cat_val, cat_label in categories_list %}
+                "{{ cat_val }}": [
+                    {% for sub in all_subcategories %}
+                        {% if sub.category == cat_val %}
+                            {id: "{{ sub.id }}", name: "{{ sub.name }}"},
+                        {% endif %}
+                    {% endfor %}
+                ],
+            {% endfor %}
+        };
 
-    subcategorySelect.innerHTML = '<option value="">Todas</option>';
+        function filterSubcategories() {
+            const categorySelect = document.getElementById('categoria');
+            const subcategorySelect = document.getElementById('subcategoria');
+            const selectedCategory = categorySelect.value;
+            const currentSub = "{{ request.GET.subcategoria }}";
 
-    if (selectedCategory && subcategoriesData[selectedCategory]) {
-      subcategoriesData[selectedCategory].forEach(sub => {
-        const option = document.createElement('option');
-        option.value = sub.id;
-        option.textContent = sub.name;
-        if (sub.id === currentSub) option.selected = true;
-        subcategorySelect.appendChild(option);
-      });
-    }
-  }
-  window.onload = filterSubcategories;
-</script>
+            subcategorySelect.innerHTML = '<option value="">Todas</option>';
+
+            if (selectedCategory && subcategoriesData[selectedCategory]) {
+                subcategoriesData[selectedCategory].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub.id;
+                    option.textContent = sub.name;
+                    if (sub.id === currentSub) option.selected = true;
+                    subcategorySelect.appendChild(option);
+                });
+            }
+        }
+
+        window.onload = filterSubcategories;
+    </script>
 {% endblock %}

@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from .forms import SignUpForm, LoginForm
 
+
 def login_user(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -21,16 +22,18 @@ def login_user(request):
             messages.error(request, "Falha na validação de segurança. Tente novamente.")
     else:
         form = LoginForm()
-    
+
     context = {
         'form': form,
         'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY
     }
     return render(request, 'accounts/login_user.html', context)
 
+
 def logout_user(request):
     logout(request)
     return redirect('login_user')
+
 
 def register_user(request):
     if request.method == 'POST':
@@ -43,14 +46,14 @@ def register_user(request):
             if User.objects.filter(username=username).exists():
                 messages.error(request, "Este nome de usuário já está em uso.")
                 return render(request, 'accounts/register_user.html', {
-                    'form': form, 
+                    'form': form,
                     'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY
                 })
-            
+
             if User.objects.filter(email=email).exists():
                 messages.error(request, "Este e-mail já está registrado.")
                 return render(request, 'accounts/register_user.html', {
-                    'form': form, 
+                    'form': form,
                     'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY
                 })
 
@@ -64,7 +67,7 @@ def register_user(request):
             messages.error(request, "Não foi possível cadastrar o usuário.")
     else:
         form = SignUpForm()
-    
+
     context = {
         'form': form,
         'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY

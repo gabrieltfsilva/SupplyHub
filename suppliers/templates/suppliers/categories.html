@@ -8,70 +8,74 @@
 
 {% block content %}
 
-<div class="form-container mb-4" style="max-width: 100%;">
-  <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
-    <i class="bi bi-plus-lg me-1"></i>ADICIONAR NOVA SUBCATEGORIA
-  </p>
-  <form method="POST" action="">
-    {% csrf_token %}
-    <div class="row g-3">
-      <div class="col-12 col-md-5">
-        <label for="nome">Nome da Subcategoria <span class="required-dot">*</span></label>
-        <input type="text" id="nome" name="nome" placeholder="Ex: Manutenção, Sensores, etc." required style="height: 45px;">
-      </div>
-      <div class="col-12 col-md-4">
-        <label for="categoria">Categoria <span class="required-dot">*</span></label>
-        <select id="categoria" name="categoria" required style="height: 45px;">
-          <option value="">Selecione uma categoria</option>
-          {% for value, label in categories_list %}
-            <option value="{{ value }}">{{ label }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-12 col-md-3 d-flex align-items-end">
-        <button type="submit" 
-                class="btn btn-primary w-100 {% if not request.user.is_superuser %}disabled{% endif %}" 
-                {% if not request.user.is_superuser %}
-                disabled 
-                style="height: 42px; padding: 0; background-color: #333 !important; border-color: #444 !important; color: #777 !important; cursor: not-allowed !important;"
-                {% else %}
-                style="height: 42px; padding: 0;"
-                {% endif %}>
-          <i class="bi bi-plus-lg me-1"></i>Adicionar
-        </button>
-      </div>
-    </div>
-  </form>
-</div>
-
-{% for value, label in categories_list %}
-  {% get_category_config label as config %}
-  
-  <div class="form-container mb-3" style="max-width: 100%;">
-    <div class="cat-header d-flex align-items-center gap-2 mb-3">
-      <div style="background-color: {{ config.bg }}; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-        <i class="bi {{ config.icon }}" style="color: {{ config.color }};"></i>
-      </div>
-      <span class="cat-name" style="font-weight: 700; color: #f0f0f0;">{{ label }}</span>
+    <div class="form-container mb-4" style="max-width: 100%;">
+        <p class="form-section-title" style="font-size: 12px; letter-spacing: 1px;">
+            <i class="bi bi-plus-lg me-1"></i>ADICIONAR NOVA SUBCATEGORIA
+        </p>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-12 col-md-5">
+                    <label for="nome">Nome da Subcategoria <span class="required-dot">*</span></label>
+                    <input type="text" id="nome" name="nome" placeholder="Ex: Manutenção, Sensores, etc." required
+                           style="height: 45px;">
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="categoria">Categoria <span class="required-dot">*</span></label>
+                    <select id="categoria" name="categoria" required style="height: 45px;">
+                        <option value="">Selecione uma categoria</option>
+                        {% for value, label in categories_list %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-3 d-flex align-items-end">
+                    <button type="submit"
+                            class="btn btn-primary w-100 {% if not request.user.is_superuser %}disabled{% endif %}"
+                            {% if not request.user.is_superuser %}
+                            disabled
+                            style="height: 42px; padding: 0; background-color: #333 !important; border-color: #444 !important; color: #777 !important; cursor: not-allowed !important;"
+                            {% else %}
+                            style="height: 42px; padding: 0;"
+                            {% endif %}>
+                        <i class="bi bi-plus-lg me-1"></i>Adicionar
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 
-    <div class="row g-2">
-      {% for sub in subcategories %}
-        {% if sub.category == value %}
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <div class="subcat-pill d-flex justify-content-between align-items-center" style="background: #1a1a1a; border: 1px solid #333; padding: 8px 12px; border-radius: 8px;">
-            <span style="color: #ccc; font-size: 14px;">{{ sub.name }}</span>
-            {% if request.user.is_superuser %}
-            <a href="{% url 'delete_subcategory' sub.id %}" class="subcat-del-btn" style="color: #555; transition: color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#555'">
-              <i class="bi bi-trash3"></i>
-            </a>
-            {% endif %}
-          </div>
+    {% for value, label in categories_list %}
+        {% get_category_config label as config %}
+
+        <div class="form-container mb-3" style="max-width: 100%;">
+            <div class="cat-header d-flex align-items-center gap-2 mb-3">
+                <div style="background-color: {{ config.bg }}; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi {{ config.icon }}" style="color: {{ config.color }};"></i>
+                </div>
+                <span class="cat-name" style="font-weight: 700; color: #f0f0f0;">{{ label }}</span>
+            </div>
+
+            <div class="row g-2">
+                {% for sub in subcategories %}
+                    {% if sub.category == value %}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="subcat-pill d-flex justify-content-between align-items-center"
+                                 style="background: #1a1a1a; border: 1px solid #333; padding: 8px 12px; border-radius: 8px;">
+                                <span style="color: #ccc; font-size: 14px;">{{ sub.name }}</span>
+                                {% if request.user.is_superuser %}
+                                    <a href="{% url 'delete_subcategory' sub.id %}" class="subcat-del-btn"
+                                       style="color: #555; transition: color 0.2s;"
+                                       onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#555'">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-  </div>
-{% endfor %}
+    {% endfor %}
 
 {% endblock %}

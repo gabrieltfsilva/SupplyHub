@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Subcategory(models.Model):
     CATEGORY_CHOICES = [
         ('diversos', 'Diversos'),
@@ -21,6 +22,7 @@ class Subcategory(models.Model):
         unique_together = ('category', 'name')
         verbose_name_plural = "Subcategories"
 
+
 class Supplier(models.Model):
     name = models.CharField(max_length=200, unique=True)
     location = models.CharField(max_length=200)
@@ -32,6 +34,7 @@ class Supplier(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Review(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='reviews')

@@ -2,28 +2,28 @@
 {% get_category_config supplier.subcategory.get_category_display as cfg %}
 
 <div class="col-12 col-md-6 col-lg-4">
-  <a href="{% url 'supplier' supplier.id %}" style="text-decoration: none; color: inherit;">
-    <div class="supplier-card">
-      <div class="supplier-card-top">
-        <div class="supplier-icon" style="background-color: {{ cfg.bg }};">
-          <i class="bi {{ cfg.icon }}" style="color: {{ cfg.color }};"></i>
-        </div>
+    <a href="{% url 'supplier' supplier.id %}" style="text-decoration: none; color: inherit;">
+        <div class="supplier-card">
+            <div class="supplier-card-top">
+                <div class="supplier-icon" style="background-color: {{ cfg.bg }};">
+                    <i class="bi {{ cfg.icon }}" style="color: {{ cfg.color }};"></i>
+                </div>
 
-        <div>
-          <h3 class="supplier-name">{{ supplier.name }}</h3>
-          <span style="color: #777; font-size: 12px;">
+                <div>
+                    <h3 class="supplier-name">{{ supplier.name }}</h3>
+                    <span style="color: #777; font-size: 12px;">
             <i class="bi bi-geo-alt me-1"></i>{{ supplier.location }}
           </span>
+                </div>
+            </div>
+
+            <div class="supplier-footer">
+                <span class="supplier-subcat">{{ supplier.subcategory.name }}</span>
+                <div class="supplier-rating d-flex align-items-center gap-1">
+                    <i class="bi bi-star-fill"></i>
+                    <span>{{ supplier.average_rating|default:"0.0"|floatformat:1 }}</span>
+                </div>
+            </div>
         </div>
-      </div>
-      
-      <div class="supplier-footer">
-        <span class="supplier-subcat">{{ supplier.subcategory.name }}</span>
-        <div class="supplier-rating d-flex align-items-center gap-1">
-          <i class="bi bi-star-fill"></i>
-          <span>{{ supplier.average_rating|default:"0.0"|floatformat:1 }}</span>
-        </div>
-      </div>
-    </div>
-  </a>
+    </a>
 </div>

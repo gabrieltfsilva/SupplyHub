@@ -1,22 +1,23 @@
 <tr style="border-bottom: 1px solid #2a2a2a;">
-  <td class="ps-4">
-    <div class="d-flex align-items-center gap-3">
-      <div style="width: 34px; height: 34px; background-color: {{ bg_color|default:'#257afa' }}; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px;">
-        {{ initials }}
-      </div>
-      <span style="font-weight: 600; color: #f0f0f0;">{{ name }}</span>
-    </div>
-  </td>
-  <td style="color: #a0a0a0; font-size: 13px;">{{ email }}</td>
-  <td>
-    <span class="badge" style="background-color: {{ badge_bg|default:'rgba(37,122,250,0.1)' }}; color: {{ badge_color|default:'#257afa' }}; border: 1px solid {{ badge_border|default:'rgba(37,122,250,0.2)' }}; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+    <td class="ps-4">
+        <div class="d-flex align-items-center gap-3">
+            <div style="width: 34px; height: 34px; background-color: {{ bg_color|default:'#257afa' }}; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px;">
+                {{ initials }}
+            </div>
+            <span style="font-weight: 600; color: #f0f0f0;">{{ name }}</span>
+        </div>
+    </td>
+    <td style="color: #a0a0a0; font-size: 13px;">{{ email }}</td>
+    <td>
+    <span class="badge"
+          style="background-color: {{ badge_bg|default:'rgba(37,122,250,0.1)' }}; color: {{ badge_color|default:'#257afa' }}; border: 1px solid {{ badge_border|default:'rgba(37,122,250,0.2)' }}; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
       {{ role }}
     </span>
-  </td>
-  <td class="text-center">
-    <div class="custom-check">
-      <input type="checkbox" id="user_{{ id }}" {% if is_admin %}checked{% endif %}>
-      <label for="user_{{ id }}"></label>
-    </div>
-  </td>
+    </td>
+    <td class="text-center">
+        <div class="custom-check">
+            <input type="checkbox" id="user_{{ id }}" {% if is_admin %}checked{% endif %}>
+            <label for="user_{{ id }}"></label>
+        </div>
+    </td>
 </tr>

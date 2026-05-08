@@ -1,3 +1,6 @@
+// Scripts for public pages (no authentication required).
+
+// Toggles password visibility between masked and plain text.
 function togglePw(inputId, iconId) {
     const input = document.getElementById(inputId);
     const icon = document.getElementById(iconId);
@@ -10,6 +13,7 @@ function togglePw(inputId, iconId) {
     }
 }
 
+// Validates in real-time if the password confirmation matches the initial password.
 function checkMatch() {
     const s1 = document.getElementById("password1").value;
     const s2 = document.getElementById("password2");

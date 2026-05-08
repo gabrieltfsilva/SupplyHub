@@ -1,0 +1,57 @@
+{# Component for scripts within Django templates. #}
+
+<script>
+    // Selects required DOM elements and initializes the rating interface constants.
+    const stars = document.querySelectorAll('.star-btn');
+    const input = document.getElementById('nota');
+    const label = document.getElementById('star-text');
+    const form = document.getElementById('ratingForm');
+
+    // Defines semantic meanings for each numerical rating value to enhance user feedback.
+    const meanings = {
+        0: "Clique nas estrelas para avaliar de 1 a 5",
+        1: "Péssimo",
+        2: "Ruim",
+        3: "Regular",
+        4: "Muito Bom",
+        5: "Excelente"
+    };
+
+    // Handles interactive star behavior including hover effects and persistent click selection.
+    stars.forEach(star => {
+        star.addEventListener('mouseenter', () => {
+            const val = parseInt(star.dataset.value);
+            label.textContent = meanings[val];
+            stars.forEach(s => s.classList.toggle('hovered', parseInt(s.dataset.value) <= val));
+        });
+
+        star.addEventListener('mouseleave', () => {
+            stars.forEach(s => s.classList.remove('hovered'));
+            label.textContent = meanings[input.value || 0];
+        });
+
+        star.addEventListener('click', () => {
+            const val = parseInt(star.dataset.value);
+            input.value = val;
+            label.classList.add('selected');
+            stars.forEach(s => {
+                const active = parseInt(s.dataset.value) <= val;
+                s.classList.toggle('active', active);
+                s.className = active ? 'bi bi-star-fill star-btn active' : 'bi bi-star star-btn';
+            });
+        });
+    });
+
+    // Ensures a valid rating is selected before allowing the form to be submitted to the server.
+    form.addEventListener('submit', (e) => {
+        const notaVal = parseInt(input.value);
+
+        if (!notaVal || notaVal < 1 || notaVal > 5) {
+            e.preventDefault();
+
+            label.textContent = "Por favor, selecione uma nota de 1 a 5!";
+            label.style.color = "#ef4444";
+            label.classList.add('selected');
+        }
+    });
+</script>

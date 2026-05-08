@@ -1,3 +1,5 @@
+{# Interface for submitting ratings and reviews for a specific supplier. #}
+
 {% extends "base.html" %}
 {% load icon_tags %}
 
@@ -61,52 +63,9 @@
         </div>
     </div>
 
-    <script>
-        const stars = document.querySelectorAll('.star-btn');
-        const input = document.getElementById('nota');
-        const label = document.getElementById('star-text');
-        const form = document.getElementById('ratingForm');
-
-        const meanings = {
-            0: "Clique nas estrelas para avaliar de 1 a 5",
-            1: "Péssimo",
-            2: "Ruim",
-            3: "Regular",
-            4: "Muito Bom",
-            5: "Excelente"
-        };
-
-        stars.forEach(star => {
-            star.addEventListener('mouseenter', () => {
-                const val = parseInt(star.dataset.value);
-                label.textContent = meanings[val];
-                stars.forEach(s => s.classList.toggle('hovered', parseInt(s.dataset.value) <= val));
-            });
-
-            star.addEventListener('mouseleave', () => {
-                stars.forEach(s => s.classList.remove('hovered'));
-                label.textContent = meanings[input.value || 0];
-            });
-
-            star.addEventListener('click', () => {
-                const val = parseInt(star.dataset.value);
-                input.value = val;
-                label.classList.add('selected');
-                stars.forEach(s => {
-                    const active = parseInt(s.dataset.value) <= val;
-                    s.classList.toggle('active', active);
-                    s.className = active ? 'bi bi-star-fill star-btn active' : 'bi bi-star star-btn';
-                });
-            });
-        });
-
-        form.addEventListener('submit', (e) => {
-            if (!input.value) {
-                e.preventDefault();
-                label.textContent = "Por favor, selecione uma nota!";
-                label.style.color = "#ef4444";
-            }
-        });
-    </script>
+    {# Including specialized script components for Django templates #}
+    {% block extra_scripts %}
+        {% include 'suppliers/_djs_rate_supplier.html' %}
+    {% endblock %}
 
 {% endblock %}

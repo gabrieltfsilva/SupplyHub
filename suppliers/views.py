@@ -8,6 +8,7 @@ from django.db.models import Avg
 from django.db import IntegrityError
 
 
+# Filters and lists suppliers with calculated average ratings and category grouping.
 @login_required
 def suppliers(request):
     search_query = request.GET.get('search', '')
@@ -35,6 +36,7 @@ def suppliers(request):
     })
 
 
+# Displays detailed information for a single supplier, including user reviews and metrics.
 @login_required
 def supplier(request, supplier_id):
     try:
@@ -53,6 +55,7 @@ def supplier(request, supplier_id):
     })
 
 
+# Handles the creation or update of supplier evaluations with mandatory feedback validation.
 @login_required
 def rate_supplier(request, supplier_id):
     supplier_obj = get_object_or_404(Supplier, id=supplier_id)
@@ -78,6 +81,7 @@ def rate_supplier(request, supplier_id):
     return render(request, 'suppliers/rate_supplier.html', {'supplier': supplier_obj})
 
 
+# Removes the current user's evaluation from a specific supplier's profile.
 @login_required
 def delete_review(request, supplier_id):
     supplier_obj = get_object_or_404(Supplier, id=supplier_id)
@@ -85,6 +89,7 @@ def delete_review(request, supplier_id):
     return redirect('supplier', supplier_id=supplier_obj.id)
 
 
+# Manages administrative creation and listing of subcategories for supplier classification.
 @login_required
 def categories(request):
     if request.method == "POST":
@@ -113,6 +118,7 @@ def categories(request):
     })
 
 
+# Restricts the removal of subcategory records to authorized administrative users.
 @login_required
 def delete_subcategory(request, sub_id):
     if not request.user.is_superuser:
@@ -123,6 +129,7 @@ def delete_subcategory(request, sub_id):
     return redirect('categories')
 
 
+# Processes the registration of new suppliers with permission-guarded form handling.
 @login_required
 def create_supplier(request):
     if not request.user.is_superuser:
@@ -161,6 +168,7 @@ def create_supplier(request):
     })
 
 
+# Manages administrative updates to supplier details and classification metadata.
 @login_required
 def edit_supplier(request, pk):
     if not request.user.is_superuser:
@@ -199,6 +207,7 @@ def edit_supplier(request, pk):
     })
 
 
+# Executes the permanent removal of supplier records, restricted to superusers.
 @login_required
 def delete_supplier(request, pk):
     if not request.user.is_superuser:

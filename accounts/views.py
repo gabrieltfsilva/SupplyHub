@@ -6,6 +6,7 @@ from django.conf import settings
 from .forms import SignUpForm, LoginForm
 
 
+# Handles user authentication, credential validation, and session creation.
 def login_user(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -30,11 +31,13 @@ def login_user(request):
     return render(request, 'accounts/login_user.html', context)
 
 
+# Terminates the current user session and clears authentication data.
 def logout_user(request):
     logout(request)
     return redirect('login_user')
 
 
+# Manages new user registration, including validation checks and account creation.
 def register_user(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)

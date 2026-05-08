@@ -6,6 +6,7 @@ from django.db.models import Avg, Count
 from suppliers.models import Supplier, Review, Subcategory
 
 
+# Generates dashboard metrics, category distribution, and top-rated supplier rankings.
 @login_required
 def home(request):
     total_suppliers = Supplier.objects.count()
@@ -32,6 +33,7 @@ def home(request):
     })
 
 
+# Lists users with conditional access control for superusers and regular staff.
 @login_required
 def users(request):
     if request.user.is_superuser:
@@ -44,6 +46,7 @@ def users(request):
     })
 
 
+# Handles administrative user removal with permission checks and self-deletion protection.
 @login_required
 def delete_user(request, user_id):
     if not request.user.is_superuser:

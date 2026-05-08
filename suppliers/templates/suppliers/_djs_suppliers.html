@@ -1,0 +1,38 @@
+{# Component for scripts within Django templates. #}
+
+<script>
+    // Generates a category-to-subcategory mapping using Django template logic for instant UI access.
+    const subcategoriesData = {
+        {% for cat_val, cat_label in categories_list %}
+            "{{ cat_val }}": [
+                {% for sub in all_subcategories %}
+                    {% if sub.category == cat_val %}
+                        {id: "{{ sub.id }}", name: "{{ sub.name }}"},
+                    {% endif %}
+                {% endfor %}
+            ],
+        {% endfor %}
+    };
+
+    // Dynamically populates the subcategory filter while maintaining selection state from URL parameters.
+    function filterSubcategories() {
+        const categorySelect = document.getElementById('categoria');
+        const subcategorySelect = document.getElementById('subcategoria');
+        const selectedCategory = categorySelect.value;
+        const currentSub = "{{ request.GET.subcategoria }}";
+
+        subcategorySelect.innerHTML = '<option value="">Todas</option>';
+
+        if (selectedCategory && subcategoriesData[selectedCategory]) {
+            subcategoriesData[selectedCategory].forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub.id;
+                option.textContent = sub.name;
+                if (sub.id === currentSub) option.selected = true;
+                subcategorySelect.appendChild(option);
+            });
+        }
+    }
+
+    window.onload = filterSubcategories;
+</script>

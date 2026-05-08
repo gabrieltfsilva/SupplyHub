@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
+# Subcategory model. Linked to a predefined set of static categories.
 class Subcategory(models.Model):
     CATEGORY_CHOICES = [
         ('diversos', 'Diversos'),
@@ -22,7 +22,7 @@ class Subcategory(models.Model):
         unique_together = ('category', 'name')
         verbose_name_plural = "Subcategories"
 
-
+# Supplier model.
 class Supplier(models.Model):
     name = models.CharField(max_length=200, unique=True)
     location = models.CharField(max_length=200)
@@ -35,7 +35,7 @@ class Supplier(models.Model):
     def __str__(self):
         return self.name
 
-
+# Review model.
 class Review(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
